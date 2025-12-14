@@ -6,7 +6,7 @@ getgenv().Config = {
         },
         ["Name"] = {
             ["Enable"] = true,
-            ["Name Brainrot"] = {"Bananita Dolphinita","Lucky Block"},
+            ["Name Brainrot"] = {"Bananita Dolphinita","Cocofanto Elefanto"},
         }
     },
     ["Account Main"] = {"dopro0","Dopro0"},
@@ -170,12 +170,12 @@ end
 while true do
     local occupied = select(1, scanPlot(myPlot))
     if occupied >= CFG["Max slot"] then
-        lp:Kick("Max slot")
+        print("Max slot")
     end
 
     local target = findTarget()
     if not target then
-        lp:Kick("No target")
+        print("No target")
     end
 
     walkTo(target.Position)
