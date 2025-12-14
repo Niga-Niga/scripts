@@ -198,7 +198,7 @@ while true do
 
     local target = findTarget()
     if not target then
-        lp:Kick("No target")
+        print("No target")
     end
 
     walkTo(target.Position)
