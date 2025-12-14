@@ -11,7 +11,7 @@ getgenv().Config = {
     },
     ["Account Main"] = {"dopro0","Dopro0"},
     ["Max slot"] = 10,
-    ["Hold Buffer"] = 1
+    ["Hold Buffer"] = 3
 }
 
 -- SERVICES
