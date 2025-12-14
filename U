@@ -6,7 +6,7 @@ getgenv().Config = {
         },
         ["Name"] = {
             ["Enable"] = true,
-            ["Name Brainrot"] = {"Odin odin dun","Lucky Block"},
+            ["Name Brainrot"] = {"Frigo Camelo","Lucky Block"},
         }
     },
     ["Account Main"] = {"dopro0","Dopro0"},
@@ -125,7 +125,7 @@ while true do
 
     local target = findTarget()
     if not target then
-        lp:Kick("No target")
+        print("No target")
     end
 
     pathTo(target.Pod:GetPivot().Position)
