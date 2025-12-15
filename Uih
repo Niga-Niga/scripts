@@ -6,7 +6,7 @@ getgenv().Config = getgenv().Config or {
         },
         ["Name"] = {
             ["Enable"] = true,
-            ["Name Brainrot"] = {"Bananita Dolphinita","Lucky Block"},
+            ["Name Brainrot"] = {"Los Bombinitos","Lucky Block"},
         }
     },
     ["Account Main"] = {"dopro0","Dopro0"},
