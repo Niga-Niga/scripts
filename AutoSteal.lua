@@ -1,4 +1,4 @@
-getgenv().Config = getgenv().Config or {
+getgenv().Config = {
     ["Auto Game"] = {
         ["Rarity"] = {
             ["Enable"] = false,
@@ -6,7 +6,7 @@ getgenv().Config = getgenv().Config or {
         },
         ["Name"] = {
             ["Enable"] = true,
-            ["Name Brainrot"] = {"Bananita Dolphinita","Lucky Block","Festive Lucky Block","Admin Lucky Block"},
+            ["Name Brainrot"] = {"Secret Lucky Block","Festive Lucky Block","Admin Lucky Block"},
         }
     },
     ["Account Main"] = {"dopro0","Dopro0"},
@@ -15,7 +15,7 @@ getgenv().Config = getgenv().Config or {
     ["Clone Check Interval"] = 1,
     ["Prompt Search Radius"] = 18,
     ["Prompt Search Radius Max"] = 60,
-    ["Prompt Search Time"] = 2.5,
+    ["Prompt Search Time"] = 0.5,
     ["Fallback Use Any Steal Prompt"] = true
 }
 
