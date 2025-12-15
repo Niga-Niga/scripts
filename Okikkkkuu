@@ -336,6 +336,7 @@ end
 if not isMain() then
     while true do
         if not hasDesiredInMyBase() then
+            print("het brainrot")
             safeWrite(lp.Name .. ".txt", "Completed-Clone")
             break
         end
@@ -347,12 +348,14 @@ end
 while true do
     local occupied = select(1, scanOwned(myPlot))
     if occupied >= (CFG["Max slot"] or 10) then
+        print("full slot")
         safeWrite(lp.Name .. ".txt", "Completed-Main")
         break
     end
 
     local target = findTarget()
     if not target then
+        print("ko co target")
         safeWrite(lp.Name .. ".txt", "Completed-Main")
         break
     end
