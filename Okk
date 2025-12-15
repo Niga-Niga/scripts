@@ -6,7 +6,7 @@ getgenv().Config = {
         },
         ["Name"] = {
             ["Enable"] = true,
-            ["Name Brainrot"] = {"Secret Lucky Block","Festive Lucky Block","Admin Lucky Block"},
+            ["Name Brainrot"] = {"Secret Lucky Block","Festive Lucky Block","Burbaloni Loliloli"},
         }
     },
     ["Account Main"] = {"dopro0","Dopro0"},
@@ -18,7 +18,6 @@ getgenv().Config = {
     ["Prompt Search Time"] = 0.5,
     ["Fallback Use Any Steal Prompt"] = true
 }
-
 local Players = game:GetService("Players")
 local PathfindingService = game:GetService("PathfindingService")
 
