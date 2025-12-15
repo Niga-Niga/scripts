@@ -282,7 +282,7 @@ end
 if not isMain() then
     while true do
         if not hasDesiredInMyBase() then
-            safeWrite(lp.Name .. ".txt", "Completed-CloneSAB")
+            safeWrite(lp.Name .. ".txt", "Completed-Clone")
             break
         end
         task.wait(CFG["Clone Check Interval"] or 1)
