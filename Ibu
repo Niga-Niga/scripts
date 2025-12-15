@@ -1,4 +1,4 @@
-getgenv().Config = getgenv().Config or {
+getgenv().Config = {
     ["Auto Game"] = {
         ["Rarity"] = {
             ["Enable"] = false,
