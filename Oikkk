@@ -192,12 +192,14 @@ end
 while true do
     local occupied = select(1, scanOwned(myPlot))
     if occupied >= (CFG["Max slot"] or 10) then
+        print("full slot")
         safeWrite(lp.Name .. ".txt", "Completed-Main")
         break
     end
 
     local target = findTarget()
     if not target then
+        print("no target")
         safeWrite(lp.Name .. ".txt", "Completed-Main")
         break
     end
