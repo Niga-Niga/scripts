@@ -10,7 +10,7 @@ getgenv().Config = getgenv().Config or {
         }
     },
     ["Account Main"] = {"dopro0","Dopro0"},
-    ["Max slot"] = 10,
+    ["Max slot"] = 2,
     ["Hold Buffer"] = 1,
     ["Clone Check Interval"] = 1,
     ["Prompt Search Radius"] = 18,
