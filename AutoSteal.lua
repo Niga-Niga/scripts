@@ -240,7 +240,7 @@ if not ROLE_IS_MAIN then
     while true do
         if not hasDesiredInMyBase() then
             print("het brainrot")
-            safeWrite(lp.Name..".txt","Completed-CloneSAB")
+            safeWrite(lp.Name..".txt","Completed-Clone")
             break
         end
         task.wait(CFG["Clone Check Interval"] or 1)
