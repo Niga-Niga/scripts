@@ -99,95 +99,93 @@ end
 local function walkTo(goalPos)
     if not (hum and hrp) then return false end
 
-    local path = PathfindingService:CreatePath({
+    local agentParams = {
         AgentRadius = 2,
         AgentHeight = 6,
         AgentCanJump = true,
         AgentCanClimb = true,
-        WaypointSpacing = 5
-    })
+        WaypointSpacing = 2, -- quan trọng: dày hơn để leo bậc thang mượt
+    }
 
-    local ok = pcall(function()
-        path:ComputeAsync(hrp.Position, goalPos)
-    end)
-    if not ok or path.Status ~= Enum.PathStatus.Success then
+    local function compute(fromPos)
+        local path = PathfindingService:CreatePath(agentParams)
+        local ok = pcall(function()
+            path:ComputeAsync(fromPos, goalPos)
+        end)
+        if not ok or path.Status ~= Enum.PathStatus.Success then
+            return nil, nil
+        end
+        local wps = path:GetWaypoints()
+        if not wps or #wps == 0 then
+            return nil, nil
+        end
+        return path, wps
+    end
+
+    local path, wps = compute(hrp.Position)
+    if not path then
         hum:MoveTo(goalPos)
         hum.MoveToFinished:Wait()
         return true
     end
 
-    local wps = path:GetWaypoints()
-    if not wps or #wps == 0 then return false end
-
-    local idx = 1
-    local lastProgress = os.clock()
-    local lastPos = hrp.Position
-
-    hum:MoveTo(wps[idx].Position)
-
-    local conn
-    conn = hum.MoveToFinished:Connect(function(reached)
-        if not reached then return end
-        idx += 1
-        if idx > #wps then
-            if conn then conn:Disconnect() end
-            return
-        end
-        if wps[idx].Action == Enum.PathWaypointAction.Jump then
-            hum.Jump = true
-        end
-        hum:MoveTo(wps[idx].Position)
+    local blocked = false
+    local blockedConn = path.Blocked:Connect(function()
+        blocked = true
     end)
 
-    while idx <= #wps do
-        task.wait(0.12)
-        local moved = (hrp.Position - lastPos).Magnitude
-        lastPos = hrp.Position
+    local i = 1
+    while i <= #wps do
+        if blocked then
+            blocked = false
+            if blockedConn then blockedConn:Disconnect() end
 
-        if moved > 0.05 then
-            lastProgress = os.clock()
-        end
-
-        if os.clock() - lastProgress > 1.8 then
-            if conn then conn:Disconnect() end
-            hum.Jump = true
-            path = PathfindingService:CreatePath({
-                AgentRadius = 2,
-                AgentHeight = 6,
-                AgentCanJump = true,
-                AgentCanClimb = true,
-                WaypointSpacing = 5
-            })
-            local ok2 = pcall(function()
-                path:ComputeAsync(hrp.Position, goalPos)
-            end)
-            if ok2 and path.Status == Enum.PathStatus.Success then
-                wps = path:GetWaypoints()
-                idx = 1
-                lastProgress = os.clock()
-                hum:MoveTo(wps[idx].Position)
-                conn = hum.MoveToFinished:Connect(function(reached)
-                    if not reached then return end
-                    idx += 1
-                    if idx > #wps then
-                        if conn then conn:Disconnect() end
-                        return
-                    end
-                    if wps[idx].Action == Enum.PathWaypointAction.Jump then
-                        hum.Jump = true
-                    end
-                    hum:MoveTo(wps[idx].Position)
-                end)
-            else
+            path, wps = compute(hrp.Position)
+            if not path then
                 hum:MoveTo(goalPos)
                 hum.MoveToFinished:Wait()
                 return true
             end
+
+            blockedConn = path.Blocked:Connect(function()
+                blocked = true
+            end)
+
+            i = 1
+        end
+
+        local wp = wps[i]
+        if wp.Action == Enum.PathWaypointAction.Jump then
+            hum.Jump = true
+        end
+
+        -- timeout nhỏ theo từng waypoint -> phản ứng nhanh khi kẹt ở bậc thang
+        local ok = moveToWait(wp.Position, 1.4)
+
+        if not ok then
+            if blockedConn then blockedConn:Disconnect() end
+            path, wps = compute(hrp.Position)
+
+            if not path then
+                hum:MoveTo(goalPos)
+                hum.MoveToFinished:Wait()
+                return true
+            end
+
+            blockedConn = path.Blocked:Connect(function()
+                blocked = true
+            end)
+
+            i = 1
+        else
+            i += 1
         end
     end
 
+    if blockedConn then blockedConn:Disconnect() end
     return true
 end
+
 
 
 local function backToBase()
