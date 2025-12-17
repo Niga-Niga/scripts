@@ -415,6 +415,8 @@ while true do
     local target = findTarget()
     if not target then
         print("ko co target")
+        task.wait(1)
+        continue
     end
 
     walkTo(target.Position)
