@@ -393,6 +393,7 @@ if not ROLE_IS_MAIN then
         if not hasDesiredInMyBase() then
             print("het brainrot")
             safeWrite(lp.Name .. ".txt", "Completed-Clone")
+            task.wait(1)
             game:Shutdown()
             break
         end
@@ -406,6 +407,7 @@ while true do
     if occupied >= (CFG["Max slot"] or 10) then
         print("max slot")
         safeWrite(lp.Name .. ".txt", "Completed-Main")
+        task.wait(1)
         game:Shutdown()
         break
     end
@@ -414,6 +416,7 @@ while true do
     if not target then
         print("ko co target")
         safeWrite(lp.Name .. ".txt", "Completed-Main")
+        task.wait(1)
         game:Shutdown()
         break
     end
