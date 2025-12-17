@@ -415,10 +415,6 @@ while true do
     local target = findTarget()
     if not target then
         print("ko co target")
-        safeWrite(lp.Name .. ".txt", "Completed-Main")
-        task.wait(1)
-        game:Shutdown()
-        break
     end
 
     walkTo(target.Position)
