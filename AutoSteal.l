@@ -6,7 +6,7 @@ getgenv().Config = getgenv().Config or {
         },
         ["Name"] = {
             ["Enable"] = true,
-            ["Name Brainrot"] = {"Tractoro Dinosauro"},
+            ["Name Brainrot"] = {"Pakrahmatmamat"},
         }
     },
     ["Max slot"] = 10,
@@ -117,7 +117,7 @@ local function computePath(fromPos, toPos)
         AgentRadius = 2,
         AgentHeight = 5,
         AgentCanJump = true,
-        AgentCanClimb = false,
+        AgentCanClimb = true,
         WaypointSpacing = 2
     })
     local ok = pcall(function()
