@@ -52,7 +52,7 @@ local function camTopDownCharacter()
 
     cam.CameraType = Enum.CameraType.Scriptable
 
-    local height = 10
+    local height = 6
     local pos = hrp.Position
     local camPos = pos + Vector3.new(0, height, 0)
 
