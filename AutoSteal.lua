@@ -124,7 +124,7 @@ local function getDistance2D(v1, v2)
     return (Vector3.new(v1.X, 0, v1.Z) - Vector3.new(v2.X, 0, v2.Z)).Magnitude
 end
 
-local SKIP_TTL = 999999
+local SKIP_TTL = 20
 local Skipped = {}
 
 local function now() return os.clock() end
