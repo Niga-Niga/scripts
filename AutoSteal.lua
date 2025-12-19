@@ -114,7 +114,7 @@ end
 
 local function computePath(fromPos, toPos)
     local path = PathfindingService:CreatePath({
-        AgentRadius = 3.5,
+        AgentRadius = 5,
         AgentHeight = 5,
         AgentCanJump = true,
         AgentCanClimb = true,
