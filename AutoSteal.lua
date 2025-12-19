@@ -38,22 +38,28 @@ end
 local Camera = workspace.CurrentCamera
 local CamSaved
 
-local function camTopDownAt(pos)
-    Camera = workspace.CurrentCamera
-    if not Camera then return end
+local function camTopDownCharacter()
+    local cam = workspace.CurrentCamera
+    if not cam or not hrp then return end
+
     CamSaved = {
-        Type = Camera.CameraType,
-        CFrame = Camera.CFrame,
-        Focus = Camera.Focus,
-        Subject = Camera.CameraSubject,
-        Fov = Camera.FieldOfView,
+        Type = cam.CameraType,
+        CFrame = cam.CFrame,
+        Focus = cam.Focus,
+        Subject = cam.CameraSubject,
+        Fov = cam.FieldOfView,
     }
-    Camera.CameraType = Enum.CameraType.Scriptable
-    local height = 70
-    local offset = Vector3.new(0, height, 0)
-    Camera.CFrame = CFrame.new(pos + offset, pos) * CFrame.Angles(-math.rad(90), 0, 0)
-    Camera.Focus = CFrame.new(pos)
+
+    cam.CameraType = Enum.CameraType.Scriptable
+
+    local height = 15
+    local pos = hrp.Position
+    local camPos = pos + Vector3.new(0, height, 0)
+
+    cam.CFrame = CFrame.new(camPos, pos)
+    cam.Focus = CFrame.new(pos)
 end
+
 
 local function camRestore()
     Camera = workspace.CurrentCamera
@@ -450,7 +456,7 @@ while true do
 
     task.wait(0.25)
 
-    camTopDownAt(target.Position)
+    camTopDownCharacter()
     pcall(function()
         holdTarget(target)
     end)
