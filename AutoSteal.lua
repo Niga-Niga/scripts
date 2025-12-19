@@ -118,7 +118,7 @@ local function computePath(fromPos, toPos)
         AgentHeight = 5,
         AgentCanJump = true,
         AgentCanClimb = true,
-        WaypointSpacing = 2
+        WaypointSpacing = 1
     })
     local ok = pcall(function()
         path:ComputeAsync(fromPos, toPos)
