@@ -6,7 +6,7 @@ getgenv().Config = getgenv().Config or {
         },
         ["Name"] = {
             ["Enable"] = true,
-            ["Name Brainrot"] = {"Bananita Dolphinita","Lucky Block","Festive Lucky Block","Admin Lucky Block"},
+            ["Name Brainrot"] = {"Noobini Pizzanini","Lucky Block","Festive Lucky Block","Admin Lucky Block"},
         }
     },
     ["Max slot"] = 10,
