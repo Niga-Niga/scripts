@@ -176,46 +176,115 @@ local function skipTarget(info)
     Skipped[targetKey(info)] = now() + SKIP_TTL
 end
 
-local function walkTo(pos)
-    local tStart = now()
-    local path, wps = computePath(hrp.Position, pos)
-    if not wps then return false end
+--// 1) Né waypoint ra xa tường (offset nhẹ + chọn bên thoáng hơn bằng raycast)
+local function offsetWaypoint(pos, offsetStuds)
+    offsetStuds = offsetStuds or 2
 
-    local blocked = false
-    local blockConn
-    blockConn = path.Blocked:Connect(function()
-        blocked = true
+    local dir = pos - hrp.Position
+    if dir.Magnitude < 0.05 then
+        return pos
+    end
+    dir = Vector3.new(dir.X, 0, dir.Z)
+    if dir.Magnitude < 0.05 then
+        return pos
+    end
+    dir = dir.Unit
+
+    local right = Vector3.new(-dir.Z, 0, dir.X)
+
+    local params = RaycastParams.new()
+    params.FilterType = Enum.RaycastFilterType.Exclude
+    params.FilterDescendantsInstances = { hrp.Parent } -- ignore character
+    params.IgnoreWater = true
+
+    local probeDist = offsetStuds + 1.5
+
+    local rHit = workspace:Raycast(pos, right * probeDist, params)
+    local lHit = workspace:Raycast(pos, -right * probeDist, params)
+
+    local rFree = rHit and rHit.Distance or probeDist
+    local lFree = lHit and lHit.Distance or probeDist
+
+    -- chọn phía thoáng hơn (đỡ đẩy vào tường/cột)
+    local side = (rFree >= lFree) and right or -right
+
+    return pos + side * offsetStuds
+end
+
+--// 2) WalkTo: pathfinding + MoveTo, nhưng mỗi waypoint đều được offset để né tường
+local function walkTo(targetPos)
+    if not targetPos then return false end
+
+    local PathfindingService = game:GetService("PathfindingService")
+    local now = os.clock
+
+    local function moveToWait(dest, timeout)
+        hum:MoveTo(dest)
+        local reached = false
+        local conn
+        conn = hum.MoveToFinished:Connect(function(ok)
+            reached = ok
+        end)
+
+        local t0 = now()
+        while now() - t0 < (timeout or 2) do
+            if reached then
+                conn:Disconnect()
+                return true
+            end
+            task.wait(0.03)
+        end
+
+        conn:Disconnect()
+        return false
+    end
+
+    -- tạo path với AgentRadius lớn hơn chút để waypoint ít sát tường hơn
+    local path = PathfindingService:CreatePath({
+        AgentRadius = 3.5,
+        AgentHeight = 6,
+        AgentCanJump = true,
+        AgentCanClimb = true,
+        WaypointSpacing = 3,
+    })
+
+    local ok = pcall(function()
+        path:ComputeAsync(hrp.Position, targetPos)
     end)
 
-    for _, wp in ipairs(wps) do
-        if blocked then
-            if blockConn then blockConn:Disconnect() end
-            return false
-        end
+    if not ok or path.Status ~= Enum.PathStatus.Success then
+        -- fallback: không có path thì vẫn thử đi thẳng (cũng offset nhẹ)
+        return moveToWait(offsetWaypoint(targetPos, 2), 4)
+    end
+
+    local wps = path:GetWaypoints()
+    local tStart = now()
+
+    for i = 1, #wps do
+        -- timeout theo khoảng cách (đỡ bị kẹt vô hạn)
+        local wp = wps[i]
+        local dest = offsetWaypoint(wp.Position, 2)
 
         if wp.Action == Enum.PathWaypointAction.Jump then
             hum.Jump = true
         end
 
-        local dist = (hrp.Position - wp.Position).Magnitude
-        local spd = hum.WalkSpeed > 0 and hum.WalkSpeed or 16
-        local perTimeout = math.clamp((dist / spd) + 1.5, 2, 10)
+        local dist = (Vector3.new(dest.X, hrp.Position.Y, dest.Z) - Vector3.new(hrp.Position.X, hrp.Position.Y, hrp.Position.Z)).Magnitude
+        local perTimeout = math.clamp(dist / 12 + 1.2, 1.5, 6) -- 12 ~ speed-ish
 
-        local ok = moveToWait(wp.Position, perTimeout)
-        if not ok then
-            if blockConn then blockConn:Disconnect() end
+        local reached = moveToWait(dest, perTimeout)
+        if not reached then
             return false
         end
 
         if now() - tStart > 60 then
-            if blockConn then blockConn:Disconnect() end
             return false
         end
     end
 
-    if blockConn then blockConn:Disconnect() end
     return true
 end
+
 
 local function backToBase()
     return walkTo(myPlot:GetPivot().Position)
