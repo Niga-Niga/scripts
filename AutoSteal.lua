@@ -109,10 +109,10 @@ end
 local function computePath(fromPos, toPos)
     local path = PathfindingService:CreatePath({
         AgentRadius = 2,
-        AgentHeight = 6,
+        AgentHeight = 5,
         AgentCanJump = true,
         AgentCanClimb = true,
-        WaypointSpacing = 3
+        WaypointSpacing = 4
     })
     local ok = pcall(function()
         path:ComputeAsync(fromPos, toPos)
