@@ -6,7 +6,7 @@ getgenv().Config = getgenv().Config or {
         },
         ["Name"] = {
             ["Enable"] = true,
-            ["Name Brainrot"] = {"Trenostruzzo Turbo 3000"}, 
+            ["Name Brainrot"] = {"Pandanini Frostini"}, 
         }
     },
     ["Max slot"] = 10,
